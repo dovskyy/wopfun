@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista dzieci - Wopfun</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #333; margin-bottom: 30px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+        }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-primary:hover { background: #0056b3; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-secondary:hover { background: #545b62; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-danger:hover { background: #c82333; }
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
+        .child-card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            transition: box-shadow 0.2s;
+        }
+        .child-card:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .child-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .child-name { font-size: 20px; font-weight: bold; color: #333; }
+        .child-info { color: #666; font-size: 14px; margin-bottom: 5px; }
+        .child-actions { display: flex; gap: 10px; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #999; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Lista dzieci</h1>
+            <a th:href="@{/children/new}" class="btn btn-primary">+ Dodaj dziecko</a>
+        </div>
+
+        <div th:if="${children.isEmpty()}" class="empty-state">
+            <p>Brak dzieci w bazie danych.</p>
+            <p>Kliknij "Dodaj dziecko" aby dodać pierwsze dziecko.</p>
+        </div>
+
+        <div th:each="child : ${children}" class="child-card">
+            <div class="child-header">
+                <div>
+                    <div class="child-name" th:text="${child.firstName + ' ' + child.lastName}">Imię Nazwisko</div>
+                    <div class="child-info">
+                        <span th:if="${child.groupName}" th:text="'Grupa: ' + ${child.groupName}">Grupa: Motylki</span>
+                        <span th:if="${child.birthDate}" th:text="' | Wiek: ' + ${child.age} + ' lat'"> | Wiek: 5 lat</span>
+                    </div>
+                    <div class="child-info" th:if="${child.diagnosis}" th:text="'Diagnoza: ' + ${child.diagnosis}">Diagnoza: ...</div>
+                </div>
+                <div class="child-actions">
+                    <a th:href="@{/children/{id}(id=${child.id})}" class="btn btn-secondary btn-sm">Zobacz</a>
+                    <a th:href="@{/children/{id}/edit(id=${child.id})}" class="btn btn-secondary btn-sm">Edytuj</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
