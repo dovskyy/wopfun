@@ -46,7 +46,6 @@ public class ChildController {
 
         model.addAttribute("child", child);
         model.addAttribute("notes", notes);
-        model.addAttribute("newNote", new ChildNote());
         return "children/view";
     }
 
@@ -60,8 +59,18 @@ public class ChildController {
 
     @PostMapping("/{id}")
     public String updateChild(@PathVariable Long id, @ModelAttribute Child child) {
-        child.setId(id);
-        childService.saveChild(child);
+        // Pobierz istniejące dziecko z bazy
+        Child existingChild = childService.getChildById(id)
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono dziecka o ID: " + id));
+
+        // Zaktualizuj tylko podstawowe pola, nie ruszając relacji
+        existingChild.setFirstName(child.getFirstName());
+        existingChild.setLastName(child.getLastName());
+        existingChild.setBirthDate(child.getBirthDate());
+        existingChild.setGroupName(child.getGroupName());
+        existingChild.setDiagnosis(child.getDiagnosis());
+
+        childService.saveChild(existingChild);
         return "redirect:/children/" + id;
     }
 
@@ -72,7 +81,18 @@ public class ChildController {
     }
 
     @PostMapping("/{id}/notes")
-    public String addNote(@PathVariable Long id, @ModelAttribute ChildNote note) {
+    public String addNote(@PathVariable Long id,
+                          @RequestParam String content,
+                          @RequestParam(required = false) String noteDate,
+                          @RequestParam(required = false) String category) {
+        ChildNote note = new ChildNote();
+        note.setContent(content);
+        if (noteDate != null && !noteDate.isEmpty()) {
+            note.setNoteDate(java.time.LocalDate.parse(noteDate));
+        }
+        if (category != null && !category.isEmpty()) {
+            note.setCategory(category);
+        }
         childNoteService.addNoteToChild(id, note);
         return "redirect:/children/" + id;
     }
