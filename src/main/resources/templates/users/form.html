@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::content})}">
+<head>
+    <title th:text="${isEdit ? 'Edycja użytkownika' : 'Nowy użytkownik'} + ' - Wopfun'">Użytkownik - Wopfun</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <!-- Header Section -->
+        <div class="mb-8">
+            <div class="flex items-center text-sm text-gray-600 mb-4">
+                <a th:href="@{/admin/users}" class="hover:text-primary-600 transition-colors">Użytkownicy</a>
+                <svg class="w-4 h-4 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+                <span th:text="${isEdit ? 'Edycja' : 'Nowy użytkownik'}">Nowy użytkownik</span>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900" th:text="${isEdit ? 'Edytuj użytkownika' : 'Dodaj nowego użytkownika'}">Nowy użytkownik</h1>
+        </div>
+
+        <!-- Error Messages -->
+        <div th:if="${errorMessage}" class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg fade-in">
+            <div class="flex items-start">
+                <svg class="w-5 h-5 text-red-500 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                </svg>
+                <span class="text-sm text-red-700" th:text="${errorMessage}"></span>
+            </div>
+        </div>
+
+        <!-- Form Card -->
+        <div class="bg-white rounded-xl shadow-sm p-8 fade-in">
+            <form th:action="${isEdit ? '/admin/users/' + user.id : '/admin/users'}" method="post" class="space-y-6">
+
+                <!-- Username -->
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700 mb-2">
+                        Nazwa użytkownika <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text"
+                           id="username"
+                           name="username"
+                           th:value="${user?.username}"
+                           required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                           placeholder="np. kowalski">
+                    <p class="mt-1 text-sm text-gray-500">Unikalna nazwa użytkownika do logowania</p>
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                        Email <span class="text-red-500">*</span>
+                    </label>
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           th:value="${user?.email}"
+                           required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                           placeholder="email@example.com">
+                    <p class="mt-1 text-sm text-gray-500">Adres email użytkownika</p>
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                        Hasło <span th:if="${!isEdit}" class="text-red-500">*</span>
+                    </label>
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           th:required="${!isEdit}"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                           placeholder="••••••••">
+                    <p th:if="${isEdit}" class="mt-1 text-sm text-gray-500">Pozostaw puste, aby nie zmieniać hasła</p>
+                    <p th:unless="${isEdit}" class="mt-1 text-sm text-gray-500">Minimum 6 znaków</p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-4 pt-6 border-t border-gray-200">
+                    <button type="submit"
+                            class="flex-1 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold py-3 px-6 rounded-lg hover:from-primary-700 hover:to-primary-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all shadow-lg hover:shadow-xl">
+                        <span th:if="${isEdit}">Zapisz zmiany</span>
+                        <span th:unless="${isEdit}">Utwórz użytkownika</span>
+                    </button>
+                    <a th:href="@{/admin/users}"
+                       class="flex-1 bg-white border border-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-lg hover:bg-gray-50 transition-all text-center">
+                        Anuluj
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
