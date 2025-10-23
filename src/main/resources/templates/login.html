@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logowanie - WopFUN</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen flex items-center justify-center">
+    <div class="max-w-md w-full px-6">
+        <!-- Logo and Title -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl shadow-lg mb-4">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent">Wopfun</h1>
+            <p class="text-gray-600 mt-2">System dokumentacji przedszkolnej</p>
+        </div>
+
+        <!-- Login Form Card -->
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Logowanie</h2>
+
+            <!-- Error Message -->
+            <div th:if="${errorMessage}" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div class="flex items-start">
+                    <svg class="w-5 h-5 text-red-500 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                    <span class="text-sm text-red-700" th:text="${errorMessage}"></span>
+                </div>
+            </div>
+
+            <!-- Logout Message -->
+            <div th:if="${logoutMessage}" class="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+                <div class="flex items-start">
+                    <svg class="w-5 h-5 text-green-500 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <span class="text-sm text-green-700" th:text="${logoutMessage}"></span>
+                </div>
+            </div>
+
+            <!-- Login Form -->
+            <form th:action="@{/login}" method="post" class="space-y-6">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700 mb-2">
+                        Nazwa użytkownika
+                    </label>
+                    <input type="text"
+                           id="username"
+                           name="username"
+                           required
+                           autofocus
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                           placeholder="Wprowadź nazwę użytkownika">
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                        Hasło
+                    </label>
+                    <input type="password"
+                           id="password"
+                           name="password"
+                           required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
+                           placeholder="Wprowadź hasło">
+                </div>
+
+                <button type="submit"
+                        class="w-full bg-gradient-to-r from-primary-600 to-primary-700 text-white font-semibold py-3 px-6 rounded-lg hover:from-primary-700 hover:to-primary-800 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all shadow-lg hover:shadow-xl">
+                    Zaloguj się
+                </button>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-6 text-sm text-gray-500">
+            <p>Wopfun - Dokumentacja IPET i WOPFU</p>
+        </div>
+    </div>
+</body>
+</html>
