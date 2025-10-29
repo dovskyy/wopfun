@@ -1,5 +1,6 @@
 package com.dovskyy.wopfun.service;
 
+import com.dovskyy.wopfun.model.Role;
 import com.dovskyy.wopfun.model.User;
 import com.dovskyy.wopfun.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,11 @@ public class UserService {
 
     @Transactional
     public User createUser(String username, String email, String rawPassword) {
+        return createUser(username, email, rawPassword, Role.USER);
+    }
+
+    @Transactional
+    public User createUser(String username, String email, String rawPassword, Role role) {
         if (userRepository.existsByUsername(username)) {
             throw new IllegalArgumentException("Użytkownik o nazwie '" + username + "' już istnieje");
         }
@@ -46,12 +52,18 @@ public class UserService {
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(rawPassword));
         user.setEnabled(true);
+        user.setRole(role != null ? role : Role.USER);
 
         return userRepository.save(user);
     }
 
     @Transactional
     public User updateUser(Long id, String username, String email, String rawPassword) {
+        return updateUser(id, username, email, rawPassword, null);
+    }
+
+    @Transactional
+    public User updateUser(Long id, String username, String email, String rawPassword, Role role) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Użytkownik nie znaleziony"));
 
@@ -71,6 +83,11 @@ public class UserService {
         // Only update password if provided
         if (rawPassword != null && !rawPassword.trim().isEmpty()) {
             user.setPassword(passwordEncoder.encode(rawPassword));
+        }
+
+        // Only update role if provided
+        if (role != null) {
+            user.setRole(role);
         }
 
         return userRepository.save(user);

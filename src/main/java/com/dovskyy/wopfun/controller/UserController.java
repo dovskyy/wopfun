@@ -1,8 +1,10 @@
 package com.dovskyy.wopfun.controller;
 
+import com.dovskyy.wopfun.model.Role;
 import com.dovskyy.wopfun.model.User;
 import com.dovskyy.wopfun.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin/users")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('ADMIN')")
 public class UserController {
 
     private final UserService userService;
@@ -28,6 +31,7 @@ public class UserController {
     public String showCreateForm(Model model) {
         model.addAttribute("user", new User());
         model.addAttribute("isEdit", false);
+        model.addAttribute("roles", Role.values());
         return "users/form";
     }
 
@@ -36,10 +40,11 @@ public class UserController {
             @RequestParam String username,
             @RequestParam String email,
             @RequestParam String password,
+            @RequestParam Role role,
             RedirectAttributes redirectAttributes
     ) {
         try {
-            userService.createUser(username, email, password);
+            userService.createUser(username, email, password, role);
             redirectAttributes.addFlashAttribute("successMessage", "Użytkownik został pomyślnie utworzony");
             return "redirect:/admin/users";
         } catch (IllegalArgumentException e) {
@@ -55,6 +60,7 @@ public class UserController {
                     .orElseThrow(() -> new IllegalArgumentException("Użytkownik nie znaleziony"));
             model.addAttribute("user", user);
             model.addAttribute("isEdit", true);
+            model.addAttribute("roles", Role.values());
             return "users/form";
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
@@ -68,10 +74,11 @@ public class UserController {
             @RequestParam String username,
             @RequestParam String email,
             @RequestParam(required = false) String password,
+            @RequestParam Role role,
             RedirectAttributes redirectAttributes
     ) {
         try {
-            userService.updateUser(id, username, email, password);
+            userService.updateUser(id, username, email, password, role);
             redirectAttributes.addFlashAttribute("successMessage", "Użytkownik został zaktualizowany");
             return "redirect:/admin/users";
         } catch (IllegalArgumentException e) {

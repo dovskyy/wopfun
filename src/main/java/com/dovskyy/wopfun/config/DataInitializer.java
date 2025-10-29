@@ -1,5 +1,6 @@
 package com.dovskyy.wopfun.config;
 
+import com.dovskyy.wopfun.model.Role;
 import com.dovskyy.wopfun.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +21,11 @@ public class DataInitializer implements CommandLineRunner {
             log.info("Baza danych jest pusta. Tworzenie domyślnego użytkownika admina...");
 
             try {
-                userService.createUser("admin", "admin@wopfun.local", "admin123");
-                log.info("✓ Utworzono domyślnego użytkownika:");
+                userService.createUser("admin", "admin@wopfun.local", "admin123", Role.ADMIN);
+                log.info("✓ Utworzono domyślnego użytkownika administratora:");
                 log.info("  Username: admin");
                 log.info("  Password: admin123");
+                log.info("  Role: ADMIN");
                 log.info("  WAŻNE: Zmień hasło po pierwszym logowaniu!");
             } catch (Exception e) {
                 log.error("✗ Błąd podczas tworzenia domyślnego użytkownika: {}", e.getMessage());

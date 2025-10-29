@@ -30,6 +30,10 @@ public class User {
     @Column(name = "enabled", nullable = false)
     private Boolean enabled = true;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role = Role.USER;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -42,6 +46,9 @@ public class User {
         updatedAt = LocalDateTime.now();
         if (enabled == null) {
             enabled = true;
+        }
+        if (role == null) {
+            role = Role.USER;
         }
     }
 
