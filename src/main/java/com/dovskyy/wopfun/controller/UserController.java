@@ -38,13 +38,15 @@ public class UserController {
     @PostMapping
     public String createUser(
             @RequestParam String username,
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
             @RequestParam String email,
             @RequestParam String password,
             @RequestParam Role role,
             RedirectAttributes redirectAttributes
     ) {
         try {
-            userService.createUser(username, email, password, role);
+            userService.createUser(username, email, password, firstName, lastName, role);
             redirectAttributes.addFlashAttribute("successMessage", "Użytkownik został pomyślnie utworzony");
             return "redirect:/admin/users";
         } catch (IllegalArgumentException e) {
@@ -72,13 +74,15 @@ public class UserController {
     public String updateUser(
             @PathVariable Long id,
             @RequestParam String username,
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
             @RequestParam String email,
             @RequestParam(required = false) String password,
             @RequestParam Role role,
             RedirectAttributes redirectAttributes
     ) {
         try {
-            userService.updateUser(id, username, email, password, role);
+            userService.updateUser(id, username, email, password, firstName, lastName, role);
             redirectAttributes.addFlashAttribute("successMessage", "Użytkownik został zaktualizowany");
             return "redirect:/admin/users";
         } catch (IllegalArgumentException e) {

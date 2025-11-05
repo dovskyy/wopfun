@@ -21,9 +21,10 @@ public class DataInitializer implements CommandLineRunner {
             log.info("Baza danych jest pusta. Tworzenie domyślnego użytkownika admina...");
 
             try {
-                userService.createUser("admin", "admin@wopfun.local", "admin123", Role.ADMIN);
+                userService.createUser("admin", "admin@wopfun.local", "admin123", "Administrator", "Systemu", Role.ADMIN);
                 log.info("✓ Utworzono domyślnego użytkownika administratora:");
                 log.info("  Username: admin");
+                log.info("  Name: Administrator Systemu");
                 log.info("  Password: admin123");
                 log.info("  Role: ADMIN");
                 log.info("  WAŻNE: Zmień hasło po pierwszym logowaniu!");
