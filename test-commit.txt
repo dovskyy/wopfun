@@ -1,0 +1,1 @@
+# Test commit - verifying git author configuration
