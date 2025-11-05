@@ -35,11 +35,16 @@ public class UserService {
 
     @Transactional
     public User createUser(String username, String email, String rawPassword) {
-        return createUser(username, email, rawPassword, Role.USER);
+        return createUser(username, email, rawPassword, null, null, Role.USER);
     }
 
     @Transactional
     public User createUser(String username, String email, String rawPassword, Role role) {
+        return createUser(username, email, rawPassword, null, null, role);
+    }
+
+    @Transactional
+    public User createUser(String username, String email, String rawPassword, String firstName, String lastName, Role role) {
         if (userRepository.existsByUsername(username)) {
             throw new IllegalArgumentException("Użytkownik o nazwie '" + username + "' już istnieje");
         }
@@ -49,6 +54,8 @@ public class UserService {
 
         User user = new User();
         user.setUsername(username);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(rawPassword));
         user.setEnabled(true);
@@ -59,11 +66,16 @@ public class UserService {
 
     @Transactional
     public User updateUser(Long id, String username, String email, String rawPassword) {
-        return updateUser(id, username, email, rawPassword, null);
+        return updateUser(id, username, email, rawPassword, null, null, null);
     }
 
     @Transactional
     public User updateUser(Long id, String username, String email, String rawPassword, Role role) {
+        return updateUser(id, username, email, rawPassword, null, null, role);
+    }
+
+    @Transactional
+    public User updateUser(Long id, String username, String email, String rawPassword, String firstName, String lastName, Role role) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Użytkownik nie znaleziony"));
 
@@ -78,6 +90,8 @@ public class UserService {
         }
 
         user.setUsername(username);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
         user.setEmail(email);
 
         // Only update password if provided

@@ -4,6 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ---
 
+## Runtime & testing policy for Claude Code
+
+- Do NOT run the application, start servers, execute tests, or perform any runtime actions in this environment. The developer (user) will run and test changes locally (for example, in IntelliJ).
+- Do NOT call external AI APIs or any network services that would consume tokens or external credits. Avoid any action that would use paid API tokens.
+- Provide code edits, clear step-by-step instructions, and exact commands that the developer should run locally to verify and test changes. Assume the user will perform all runtime verification.
+- Do NOT create, use, or reveal secrets (API keys, passwords). If secrets are required, explain how to configure them locally but do not include values.
+
+---
+
 ## Project Overview
 
 **Wopfun** is a Spring Boot application for kindergarten documentation automation. It helps physiotherapists generate official WOPFU and IPET documents for children based on stored observations and AI-generated content.
@@ -153,8 +162,8 @@ When implementing AI generation:
 ```json
 {
   "mocne_strony": "Formal paragraph about child's strengths...",
-  "zalecenia": ["Recommendation 1", "Recommendation 2", ...],
-  "cele_szczegolowe": ["Goal 1", "Goal 2", ...]
+  "zalecenia": ["Recommendation 1", "Recommendation 2"],
+  "cele_szczegolowe": ["Goal 1", "Goal 2"]
 }
 ```
 
@@ -218,3 +227,5 @@ All user-facing content is in **Polish**. Key terminology:
 - **cele szczegółowe** - specific goals
 - **diagnoza** - diagnosis
 - **obserwacje** - observations
+
+

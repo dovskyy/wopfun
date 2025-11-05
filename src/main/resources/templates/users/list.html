@@ -88,10 +88,18 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 h-10 w-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center">
-                                        <span class="text-white font-semibold" th:text="${#strings.substring(user.username, 0, 1).toUpperCase()}">U</span>
+                                        <span class="text-white font-semibold"
+                                              th:text="${user.firstName != null ? #strings.substring(user.firstName, 0, 1).toUpperCase() : #strings.substring(user.username, 0, 1).toUpperCase()}">U</span>
                                     </div>
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900" th:text="${user.username}">Username</div>
+                                        <div class="text-sm font-medium text-gray-900">
+                                            <span th:if="${user.firstName != null || user.lastName != null}">
+                                                <span th:text="${user.firstName != null ? user.firstName : ''}"></span>
+                                                <span th:text="${user.lastName != null ? ' ' + user.lastName : ''}"></span>
+                                            </span>
+                                            <span th:unless="${user.firstName != null || user.lastName != null}" th:text="${user.username}">Username</span>
+                                        </div>
+                                        <div class="text-sm text-gray-500" th:text="${user.username}">username</div>
                                     </div>
                                 </div>
                             </td>

@@ -81,7 +81,7 @@
                 </div>
 
                 <div class="flex items-center space-x-4">
-                    <span class="text-sm text-gray-500 hidden sm:inline" sec:authentication="name">Użytkownik</span>
+                    <span class="text-sm text-gray-500 hidden sm:inline" th:text="${currentUserDisplayName != null ? currentUserDisplayName : 'Użytkownik'}">Użytkownik</span>
                     <form th:action="@{/logout}" method="post" class="inline">
                         <button type="submit" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-primary-400 hover:text-primary-700 transition-all">
                             <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
