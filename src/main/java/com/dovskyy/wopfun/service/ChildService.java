@@ -1,6 +1,7 @@
 package com.dovskyy.wopfun.service;
 
 import com.dovskyy.wopfun.model.Child;
+import com.dovskyy.wopfun.model.Group;
 import com.dovskyy.wopfun.repository.ChildRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class ChildService {
     }
 
     @Transactional(readOnly = true)
-    public List<Child> getChildrenByGroup(String groupName) {
-        return childRepository.findByGroupName(groupName);
+    public List<Child> getChildrenByGroup(Group group) {
+        return childRepository.findByGroup(group);
     }
 }
