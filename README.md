@@ -122,9 +122,9 @@ mvnw.cmd spring-boot:run
 
 **Phase 1: Core Application** (in progress)
 - ✓ Project setup
-- ⧖ Database schema & entities
-- ⧖ Basic CRUD for children and notes
-- ⧖ Thymeleaf forms and views
+- ✓ Database schema & entities
+- ✓ Basic CRUD for children and notes
+- ✓ Thymeleaf forms and views
 
 **Phase 2: AI Integration** (future)
 - Claude API service integration

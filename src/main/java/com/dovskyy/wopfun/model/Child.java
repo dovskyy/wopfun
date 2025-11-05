@@ -30,8 +30,9 @@ public class Child {
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
-    @Column(name = "group_name")
-    private String groupName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id")
+    private Group group;
 
     @Column(name = "diagnosis", columnDefinition = "TEXT")
     private String diagnosis;

@@ -1,6 +1,7 @@
 package com.dovskyy.wopfun.repository;
 
 import com.dovskyy.wopfun.model.Child;
+import com.dovskyy.wopfun.model.Group;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +12,7 @@ public interface ChildRepository extends JpaRepository<Child, Long> {
 
     List<Child> findByLastNameContainingIgnoreCase(String lastName);
 
-    List<Child> findByGroupName(String groupName);
+    List<Child> findByGroup(Group group);
 
     List<Child> findAllByOrderByLastNameAsc();
 }

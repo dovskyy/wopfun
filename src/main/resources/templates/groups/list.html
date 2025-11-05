@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::content})}">
+<head>
+    <title>Lista grup - Wopfun</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <!-- Header Section -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Lista grup</h1>
+                <p class="text-gray-600 mt-1">Zarządzaj grupami przedszkolnymi</p>
+            </div>
+            <a th:href="@{/groups/new}"
+               class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white font-medium rounded-lg shadow-lg hover:from-primary-700 hover:to-primary-800 transition-all duration-200 transform hover:scale-105 btn-ripple">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                Dodaj grupę
+            </a>
+        </div>
+
+        <!-- Empty State -->
+        <div th:if="${groups.isEmpty()}" class="bg-white rounded-xl shadow-sm p-12 text-center fade-in">
+            <div class="empty-state-icon mx-auto mb-6">
+                <svg class="w-full h-full text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                          d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">Brak grup w bazie danych</h3>
+            <p class="text-gray-600 mb-6">Rozpocznij pracę dodając pierwszą grupę do systemu</p>
+            <a th:href="@{/groups/new}"
+               class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                Dodaj pierwszą grupę
+            </a>
+        </div>
+
+        <!-- Groups Grid -->
+        <div th:unless="${groups.isEmpty()}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div th:each="group : ${groups}" class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden card-hover fade-in border border-gray-100 flex flex-col">
+                <!-- Card Header -->
+                <div class="bg-gradient-to-r from-primary-50 to-blue-50 px-6 py-4 border-b border-gray-100">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-gray-900 mb-1" th:text="${group.name}">Nazwa grupy</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Body -->
+                <div class="px-6 py-4 flex-grow">
+                    <div th:if="${group.description}" class="mb-4">
+                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Opis</p>
+                        <p class="text-sm text-gray-700 line-clamp-3" th:text="${group.description}">Opis grupy</p>
+                    </div>
+
+                    <div th:unless="${group.description}" class="mb-4">
+                        <p class="text-sm text-gray-400 italic">Brak opisu</p>
+                    </div>
+                </div>
+
+                <!-- Card Footer -->
+                <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex gap-3">
+                    <a th:href="@{/groups/{id}/edit(id=${group.id})}"
+                       class="flex-1 inline-flex items-center justify-center px-4 py-2.5 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-all duration-200">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                        <span class="inline-block min-w-[3.5rem] text-center">Edytuj</span>
+                    </a>
+                    <form th:action="@{/groups/{id}/delete(id=${group.id})}" method="post" class="flex-1">
+                        <button type="submit"
+                                onclick="return confirm('Czy na pewno chcesz usunąć tę grupę?')"
+                                class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-white border border-red-300 text-red-600 text-sm font-medium rounded-lg hover:bg-red-50 transition-all duration-200">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                            </svg>
+                            <span class="inline-block min-w-[3.5rem] text-center">Usuń</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

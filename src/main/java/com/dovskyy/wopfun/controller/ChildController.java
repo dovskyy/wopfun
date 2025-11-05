@@ -2,8 +2,10 @@ package com.dovskyy.wopfun.controller;
 
 import com.dovskyy.wopfun.model.Child;
 import com.dovskyy.wopfun.model.ChildNote;
+import com.dovskyy.wopfun.model.Group;
 import com.dovskyy.wopfun.service.ChildNoteService;
 import com.dovskyy.wopfun.service.ChildService;
+import com.dovskyy.wopfun.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,7 @@ public class ChildController {
 
     private final ChildService childService;
     private final ChildNoteService childNoteService;
+    private final GroupService groupService;
 
     @GetMapping
     public String listChildren(Model model) {
@@ -29,11 +32,17 @@ public class ChildController {
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("child", new Child());
+        model.addAttribute("groups", groupService.getAllGroups());
         return "children/form";
     }
 
     @PostMapping
-    public String createChild(@ModelAttribute Child child) {
+    public String createChild(@ModelAttribute Child child, @RequestParam(required = false) Long groupId) {
+        if (groupId != null) {
+            Group group = groupService.getGroupById(groupId)
+                    .orElseThrow(() -> new RuntimeException("Nie znaleziono grupy o ID: " + groupId));
+            child.setGroup(group);
+        }
         childService.saveChild(child);
         return "redirect:/children";
     }
@@ -54,11 +63,12 @@ public class ChildController {
         Child child = childService.getChildById(id)
                 .orElseThrow(() -> new RuntimeException("Nie znaleziono dziecka o ID: " + id));
         model.addAttribute("child", child);
+        model.addAttribute("groups", groupService.getAllGroups());
         return "children/form";
     }
 
     @PostMapping("/{id}")
-    public String updateChild(@PathVariable Long id, @ModelAttribute Child child) {
+    public String updateChild(@PathVariable Long id, @ModelAttribute Child child, @RequestParam(required = false) Long groupId) {
         // Pobierz istniejące dziecko z bazy
         Child existingChild = childService.getChildById(id)
                 .orElseThrow(() -> new RuntimeException("Nie znaleziono dziecka o ID: " + id));
@@ -67,8 +77,16 @@ public class ChildController {
         existingChild.setFirstName(child.getFirstName());
         existingChild.setLastName(child.getLastName());
         existingChild.setBirthDate(child.getBirthDate());
-        existingChild.setGroupName(child.getGroupName());
         existingChild.setDiagnosis(child.getDiagnosis());
+
+        // Zaktualizuj grupę
+        if (groupId != null) {
+            Group group = groupService.getGroupById(groupId)
+                    .orElseThrow(() -> new RuntimeException("Nie znaleziono grupy o ID: " + groupId));
+            existingChild.setGroup(group);
+        } else {
+            existingChild.setGroup(null);
+        }
 
         childService.saveChild(existingChild);
         return "redirect:/children/" + id;

@@ -35,11 +35,11 @@
                     <div>
                         <h1 class="text-3xl font-bold text-white mb-2" th:text="${child.firstName + ' ' + child.lastName}">Imię Nazwisko</h1>
                         <div class="flex flex-wrap gap-3">
-                            <span th:if="${child.groupName}" class="inline-flex items-center px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-sm font-medium rounded-full">
+                            <span th:if="${child.group != null}" class="inline-flex items-center px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-sm font-medium rounded-full">
                                 <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"></path>
                                 </svg>
-                                <span th:text="${child.groupName}">Grupa</span>
+                                <span th:text="${child.group.name}">Grupa</span>
                             </span>
                             <span th:if="${child.birthDate}" class="inline-flex items-center px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-sm font-medium rounded-full">
                                 <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
