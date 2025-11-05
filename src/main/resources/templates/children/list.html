@@ -5,10 +5,26 @@
 </head>
 <body>
     <div th:fragment="content">
+        <!-- Breadcrumb -->
+        <nav class="flex items-center space-x-2 text-sm text-gray-600 mb-6">
+            <a th:href="@{/children}" class="hover:text-primary-600 transition-colors flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
+                </svg>
+                Wybór grupy
+            </a>
+            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="font-medium text-gray-900" th:text="${group != null ? group.name : 'Wszystkie dzieci'}">Grupa</span>
+        </nav>
+
         <!-- Header Section -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
             <div>
-                <h1 class="text-3xl font-bold text-gray-900">Lista dzieci</h1>
+                <h1 class="text-3xl font-bold text-gray-900">
+                    <span th:text="${group != null ? 'Dzieci z grupy: ' + group.name : 'Lista dzieci'}">Lista dzieci</span>
+                </h1>
                 <p class="text-gray-600 mt-1">Zarządzaj kartami dzieci i ich obserwacjami</p>
             </div>
             <a th:href="@{/children/new}"
@@ -28,14 +44,21 @@
                           d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                 </svg>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 mb-2">Brak dzieci w bazie danych</h3>
-            <p class="text-gray-600 mb-6">Rozpocznij pracę dodając pierwsze dziecko do systemu</p>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                <span th:if="${group != null}" th:text="'Brak dzieci w grupie: ' + ${group.name}">Brak dzieci w tej grupie</span>
+                <span th:unless="${group != null}">Brak dzieci w bazie danych</span>
+            </h3>
+            <p class="text-gray-600 mb-6">
+                <span th:if="${group != null}">Dodaj dziecko do tej grupy, aby rozpocząć pracę</span>
+                <span th:unless="${group != null}">Rozpocznij pracę dodając pierwsze dziecko do systemu</span>
+            </p>
             <a th:href="@{/children/new}"
                class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                 </svg>
-                Dodaj pierwsze dziecko
+                <span th:if="${group != null}">Dodaj dziecko do grupy</span>
+                <span th:unless="${group != null}">Dodaj pierwsze dziecko</span>
             </a>
         </div>
 

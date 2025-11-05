@@ -23,9 +23,19 @@ public class ChildController {
     private final GroupService groupService;
 
     @GetMapping
-    public String listChildren(Model model) {
-        List<Child> children = childService.getAllChildren();
+    public String selectGroup(Model model) {
+        List<Group> groups = groupService.getAllGroups();
+        model.addAttribute("groups", groups);
+        return "children/select-group";
+    }
+
+    @GetMapping("/group/{groupId}")
+    public String listChildrenByGroup(@PathVariable Long groupId, Model model) {
+        Group group = groupService.getGroupById(groupId)
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono grupy o ID: " + groupId));
+        List<Child> children = childService.getChildrenByGroup(group);
         model.addAttribute("children", children);
+        model.addAttribute("group", group);
         return "children/list";
     }
 
